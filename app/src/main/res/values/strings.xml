@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">SovcombankTest</string>
+    <string name="appName">SovcombankTest</string>
+    <string name="unknownError">Произошла ошибка, попробуйте позже или обратитесь в службу поддержки</string>
+    <string name="incorrectSmsCode">Код неверный, проверть введенные данные</string>
+    <string name="appbarTitle">Вход в мобильный банк</string>
+    <string name="title">Введите код, полученный из SMS</string>
 </resources>
