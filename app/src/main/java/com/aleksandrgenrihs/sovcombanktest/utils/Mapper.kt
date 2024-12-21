@@ -1,4 +1,4 @@
-package com.aleksandrgenrihs.sovcombanktest
+package com.aleksandrgenrihs.sovcombanktest.utils
 
 interface Mapper<I, O> {
 

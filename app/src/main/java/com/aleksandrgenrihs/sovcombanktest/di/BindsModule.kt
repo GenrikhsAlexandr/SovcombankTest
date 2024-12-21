@@ -1,7 +1,7 @@
 package com.aleksandrgenrihs.sovcombanktest.di
 
-import com.aleksandrgenrihs.sovcombanktest.data.SmsCodeRepositoryImpl
-import com.aleksandrgenrihs.sovcombanktest.domain.SmsCodeRepository
+import com.aleksandrgenrihs.sovcombanktest.data.OtpRepositoryImpl
+import com.aleksandrgenrihs.sovcombanktest.domain.OtpRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -14,5 +14,5 @@ interface BindsModule {
 
     @Binds
     @Singleton
-    fun bindSmsCodeRepository(impl: SmsCodeRepositoryImpl): SmsCodeRepository
+    fun bindOtpRepository(impl: OtpRepositoryImpl): OtpRepository
 }

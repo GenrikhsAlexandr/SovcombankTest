@@ -28,6 +28,20 @@ class SharedPref
             .apply()
     }
 
+    /**
+     * Сохраняем время, когда можно будет отправить запрос повторно
+     */
+    fun saveCodeLength(codeLength: Int) {
+        preferences.edit()
+            .putInt(
+                "code", codeLength
+            )
+            .apply()
+    }
+
     fun getTime(): Long =
         preferences.getLong("time", 0)
+
+    fun getCodeLength(): Int =
+        preferences.getInt("code", 0)
 }

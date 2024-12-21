@@ -1,9 +1,8 @@
 package com.aleksandrgenrihs.sovcombanktest.presentation
 
-data class SmsCodeUiState(
+data class OtpUiState(
     val code: String = "",
-    val errorText: String? = null,
-    val incorrectCodeText: String? = null,
+    val correctCode: Boolean = true,
     val secondsLeft: Int = 0,
     val canResend: Boolean = true,
     val canVerify: Boolean = false,

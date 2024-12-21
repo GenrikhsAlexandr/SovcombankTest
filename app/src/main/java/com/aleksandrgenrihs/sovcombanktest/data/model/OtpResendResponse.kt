@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 import kotlin.time.Duration
 
 @Serializable
-data class SmsSendResponseNetwork(
+data class OtpResendResponse(
     val canResendIn: Duration,
     val codeLength: Int
 )

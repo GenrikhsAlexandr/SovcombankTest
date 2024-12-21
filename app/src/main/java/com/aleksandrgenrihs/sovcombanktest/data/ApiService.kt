@@ -1,8 +1,8 @@
 package com.aleksandrgenrihs.sovcombanktest.data
 
-import com.aleksandrgenrihs.sovcombanktest.data.model.ResendSmsCodeResponseNetwork
-import com.aleksandrgenrihs.sovcombanktest.data.model.SmsCodeRequestNetwork
-import com.aleksandrgenrihs.sovcombanktest.data.model.SmsSendResponseNetwork
+import com.aleksandrgenrihs.sovcombanktest.data.model.OtpVerifyResponse
+import com.aleksandrgenrihs.sovcombanktest.data.model.OtpRequest
+import com.aleksandrgenrihs.sovcombanktest.data.model.OtpResendResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
@@ -10,16 +10,14 @@ import retrofit2.http.POST
 interface ApiService {
 
     /**
-     * Отправка  кода из смс
+     * Отправка  кода из otp
      */
     @POST("v1/reg/otp")
-    suspend fun sendSmsCode(@Body request: SmsCodeRequestNetwork): Response<ResendSmsCodeResponseNetwork>
+    suspend fun otpVerify(@Body request: OtpRequest): Response<OtpVerifyResponse>
 
     /**
-     * Запрос на повторную отправку смс
+     * Запрос на повторную отправку otp
      */
     @POST("v1/reg/otpresend")
-    suspend fun resendSmsCode(): Response<SmsSendResponseNetwork>
-
-
+    suspend fun otpResend(): Response<OtpResendResponse>
 }

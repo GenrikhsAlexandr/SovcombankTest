@@ -18,7 +18,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             SovcombankTestTheme {
                 Surface (modifier = Modifier.fillMaxSize()) {
-                    SmsCodeScreen()
+                    OtpScreen()
                 }
             }
         }

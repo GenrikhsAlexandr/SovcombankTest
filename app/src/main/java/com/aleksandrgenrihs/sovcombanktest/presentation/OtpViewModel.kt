@@ -5,11 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.aleksandrgenrihs.sovcombanktest.domain.SmsCodeInteractor
-import com.aleksandrgenrihs.sovcombanktest.domain.model.ResendSmsCodeResponse
-import com.aleksandrgenrihs.sovcombanktest.utils.NetworkException
+import com.aleksandrgenrihs.sovcombanktest.domain.OtpInteractor
+import com.aleksandrgenrihs.sovcombanktest.domain.model.OtpVerify
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
@@ -18,65 +16,70 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
 @HiltViewModel
-class SmsCodeViewModel
-@Inject constructor(private val interactor: SmsCodeInteractor) : ViewModel() {
+class OtpViewModel
+@Inject constructor(private val interactor: OtpInteractor) : ViewModel() {
 
     private var currentInput = ""
-    private var job: Job? = null
-    private var result: ResendSmsCodeResponse? = null
-    var viewState by mutableStateOf(SmsCodeUiState())
+    private var result: OtpVerify? = null
+    var viewState by mutableStateOf(OtpUiState())
 
     init {
         viewModelScope.launch {
-            sendRequestSmsCode()
+            otpRequest()
         }
     }
 
-    fun sendRequestSmsCode() {
+    fun otpRequest() {
         viewModelScope.launch {
             viewState = viewState.copy(
                 loading = true
             )
             try {
                 if (!interactor.canSendRequest()) {
+                    startTimerIfNeeded()
                     return@launch
                 }
-                val response = interactor.requestSmsCode()
+                val response = interactor.otpRequest()
                     .onSuccess {
                         viewState = viewState.copy(
-                            codeLength = it.codeLength,
                             canResend = false,
                         )
                     }
                     .getOrThrow()
-                setCanResendIn(response.canResendIn)
-            } catch (e: NetworkException) {
+                setCanResendIn(response.canResendIn, response.codeLength)
+            } catch (e: Exception) {
+                e.printStackTrace()
                 viewState = viewState.copy(
-                    errorText = e.message,
                     isError = true,
                     loading = false
                 )
             }
+        }.invokeOnCompletion {
+            viewState = viewState.copy(
+                loading = false
+            )
         }
     }
 
-    private suspend fun setCanResendIn(canResendIn: Duration) {
+    private suspend fun setCanResendIn(canResendIn: Duration, codeLength: Int) {
         try {
-            interactor.setCanResendIn(canResendIn)
+            interactor.setCanResendIn(canResendIn, codeLength)
             startTimerIfNeeded()
             viewState = viewState.copy(isError = false)
-        } catch (e: NetworkException) {
+        } catch (e: Exception) {
+            e.printStackTrace()
             viewState = viewState.copy(
                 isError = true,
-                errorText = e.message,
             )
-        } finally {
-            viewState = viewState.copy(loading = false)
         }
     }
 
     private suspend fun startTimerIfNeeded() {
         val secondsLeft = interactor.getCanResendInSeconds()
+        val codeLength = interactor.getCodeLength()
+        viewState = viewState.copy(
+            codeLength = codeLength,
+        )
         updateResendButtonState(secondsLeft)
         startTimer(secondsLeft)
     }
@@ -111,40 +114,32 @@ class SmsCodeViewModel
 
     fun onInputChange(newValue: String) {
         currentInput = newValue.replace(" ", "")
+        val canVerify = validateInput()
         viewState = viewState.copy(
             userInput = newValue,
-            incorrectCodeText = null,
-            canVerify = validateInput(),
+            correctCode = true,
+            canVerify = canVerify,
         )
-        sendSmsCode()
+        if (!canVerify) return
+        otpVerify()
     }
 
-    private fun sendSmsCode() {
-        if (job?.isActive == true) {
-            return
-        }
-
-        job = viewModelScope.launch {
-            val isValid = validateInput()
-            if (!isValid) return@launch
-
+    private fun otpVerify() {
+        viewModelScope.launch {
             viewState = viewState.copy(loading = true)
             try {
-                result = interactor.sendSmsCode(currentInput).getOrThrow()
+                result = interactor.otpVerify(currentInput).getOrThrow()
                 val success = result?.success ?: false
-                val message = result?.message ?: ""
                 viewState = viewState.copy(
-                    incorrectCodeText = if (success) null else message,
+                    correctCode = success,
                 )
             } catch (e: Exception) {
                 viewState = viewState.copy(
                     isError = true,
-                    errorText = e.message
                 )
 
             } finally {
                 viewState = viewState.copy(loading = false)
-                job = null
             }
         }
     }

@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -62,8 +63,8 @@ import com.aleksandrgenrihs.sovcombanktest.ui.theme.Red
 import com.aleksandrgenrihs.sovcombanktest.ui.theme.SovcombankTestTheme
 
 @Composable
-fun SmsCodeScreen(
-    viewModel: SmsCodeViewModel = hiltViewModel()
+fun OtpScreen(
+    viewModel: OtpViewModel = hiltViewModel()
 ) {
     val viewState = viewModel.viewState
     val context = LocalContext.current
@@ -80,27 +81,27 @@ fun SmsCodeScreen(
     Content(
         viewState = viewState,
         onClickBack = { (context as? Activity)?.finish() },//так как некуда возращаться, поэтому при нажатии приложение закроется
-        onClickResend = viewModel::sendRequestSmsCode,
+        onClickResend = viewModel::otpRequest,
         userInput = viewState.userInput,
         onInputChange = { viewModel.onInputChange(it) },
+        errorText = if (!viewState.correctCode) stringResource(id = R.string.incorrectCode) else null
     )
     if (viewState.isError) {
-        viewState.errorText?.let {
-            DialogError(
-                onDismiss = { (context as? Activity)?.finish() },
-                text = it
-            )
-        }
+        DialogError(
+            onDismiss = { (context as? Activity)?.finish() },
+            text = stringResource(id = R.string.unknownError)
+        )
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun Content(
-    viewState: SmsCodeUiState,
+    viewState: OtpUiState,
     onClickBack: () -> Unit = {},
     onClickResend: () -> Unit = {},
     userInput: String,
+    errorText: String?,
     onInputChange: (String) -> Unit = {},
 ) {
     Scaffold(
@@ -131,7 +132,8 @@ private fun Content(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(horizontal = 16.dp, vertical = 30.dp),
+                .padding(horizontal = 16.dp, vertical = 30.dp)
+                .imePadding(),
             contentAlignment = Alignment.Center
         ) {
             if (viewState.loading) {
@@ -156,7 +158,7 @@ private fun Content(
                 CodeInputTextField(
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally),
-                    errorText = viewState.incorrectCodeText,
+                    errorText = errorText,
                     onInputChange = onInputChange,
                     codeLength = viewState.codeLength,
                     input = userInput
@@ -292,13 +294,11 @@ private fun CodeInputTextField(
 private fun AuthEmailVerificationCodeScreenPreview() {
     SovcombankTestTheme() {
         Content(
-            viewState = SmsCodeUiState(
-                errorText = "Error",
-                userInput = ""
-            ),
+            viewState = OtpUiState(),
             userInput = "",
             onClickBack = {},
             onClickResend = {},
+            errorText = "Error",
             onInputChange = {}
         )
     }

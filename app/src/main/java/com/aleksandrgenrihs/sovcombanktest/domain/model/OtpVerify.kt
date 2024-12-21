@@ -1,6 +1,5 @@
 package com.aleksandrgenrihs.sovcombanktest.domain.model
 
-data class ResendSmsCodeResponse(
+data class OtpVerify(
     val success: Boolean,
-    val message: String? = null
 )
