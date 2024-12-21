@@ -4,4 +4,8 @@
     <string name="incorrectSmsCode">Код неверный, проверть введенные данные</string>
     <string name="appbarTitle">Вход в мобильный банк</string>
     <string name="title">Введите код, полученный из SMS</string>
+    <string name="resend">Отправить код повторно </string>
+    <string name="blockResend">Отправить код повторно через 00:\%1$s\ </string>
+    <string name="errorTitle">Ошибка </string>
+    <string name="close">Закрыть </string>
 </resources>

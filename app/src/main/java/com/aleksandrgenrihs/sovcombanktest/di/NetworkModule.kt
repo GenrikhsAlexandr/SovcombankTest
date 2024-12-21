@@ -19,7 +19,7 @@ import javax.inject.Singleton
 /**
  * Пока используется "LocalHost" необходимо подставить нужный URL
  */
-const val BASE_URL = "LocalHost"
+const val BASE_URL = "https://10.0.2.2:8080"
 
 @Module
 @InstallIn(SingletonComponent::class)

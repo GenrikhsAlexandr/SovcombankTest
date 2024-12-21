@@ -1,11 +1,12 @@
 package com.aleksandrgenrihs.sovcombanktest.domain
 
-import com.aleksandrgenrihs.sovcombanktest.domain.model.SmsSendResult
+import com.aleksandrgenrihs.sovcombanktest.domain.model.ResendSmsCodeResponse
+import com.aleksandrgenrihs.sovcombanktest.domain.model.SmsSendResponse
 import kotlin.time.Duration
 
 interface SmsCodeRepository {
     /**
-     * Определите, как долго пользователь должен ждать перед отправкой нового письма с подтверждением
+     * Определяем, как долго пользователь должен ждать перед отправкой нового письма с подтверждением
      */
     suspend fun setCanResendIn(duration: Duration)
 
@@ -22,10 +23,10 @@ interface SmsCodeRepository {
     /**
      * Отправить код подтверждения пользователю
      */
-    suspend fun requestSmsCode(): Result<SmsSendResult>
+    suspend fun requestSmsCode(): Result<SmsSendResponse>
 
     /**
      *  Верификация пользователя по коду смс
      */
-    suspend fun sendSmsCode(code: Int): Result<Unit>
+    suspend fun sendSmsCode(code: Int): Result<ResendSmsCodeResponse>
 }
