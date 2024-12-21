@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-   alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.jetbrainsKotlinPluginSerialization)
     alias(libs.plugins.daggerHiltAndroid)
     alias(libs.plugins.kotlinParcelize)
@@ -46,6 +46,14 @@ android {
 
 dependencies {
 
+    // Kotlin
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.kotlinx.coroutines.core)
+
+    // Serializers
+    implementation(libs.kotlinx.serialization.json)
+
+    // Android
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
 
@@ -56,18 +64,6 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.navigation.compose)
 
-    implementation(libs.hilt.android)
-    ksp(libs.hilt.compiler)
-
-    implementation(libs.kotlinx.coroutines.android)
-    implementation(libs.kotlinx.coroutines.core)
-    implementation(libs.kotlinx.serialization.json)
-
-    implementation(libs.okhttp)
-    implementation(libs.logging.interceptor)
-    implementation(libs.retrofit)
-    implementation(libs.retrofit2.kotlinx.serialization.converter)
-
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
@@ -75,6 +71,20 @@ dependencies {
 
     implementation(libs.androidx.ui.text.google.fonts)
 
+    // Di
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
+
+    // Network
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit2.kotlinx.serialization.converter)
+
+    //SMS
+    implementation(libs.play.services.auth.api.phone)
+
+    // Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

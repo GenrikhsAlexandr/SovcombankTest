@@ -34,6 +34,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -52,6 +53,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.aleksandrgenrihs.sovcombanktest.R
+import com.aleksandrgenrihs.sovcombanktest.receiver.SmsBroadcastReceiver
 import com.aleksandrgenrihs.sovcombanktest.ui.theme.Black
 import com.aleksandrgenrihs.sovcombanktest.ui.theme.Blue
 import com.aleksandrgenrihs.sovcombanktest.ui.theme.Gray500
@@ -66,9 +68,18 @@ fun SmsCodeScreen(
     val viewState = viewModel.viewState
     val context = LocalContext.current
 
+    DisposableEffect(Unit) {
+        SmsBroadcastReceiver.setOnCodeReceivedListener { code ->
+            viewModel.onInputChange(code)
+        }
+        onDispose {
+            SmsBroadcastReceiver.removeOnCodeReceivedListener()
+        }
+    }
+
     Content(
         viewState = viewState,
-        onClickBack = { (context as? Activity)?.finish() } ,//так как некуда возращаться, поэтому при нажатии приложение закроется
+        onClickBack = { (context as? Activity)?.finish() },//так как некуда возращаться, поэтому при нажатии приложение закроется
         onClickResend = viewModel::sendRequestSmsCode,
         userInput = viewState.userInput,
         onInputChange = { viewModel.onInputChange(it) },
