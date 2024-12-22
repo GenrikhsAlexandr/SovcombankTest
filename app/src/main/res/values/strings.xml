@@ -8,4 +8,5 @@
     <string name="blockResend">Отправить код повторно через 00:\%1$s\ </string>
     <string name="errorTitle">Ошибка </string>
     <string name="close">Закрыть </string>
+    <string name="permissionIsNotGranted">Разрешение на SMS не получено. Автоподстановка кода из смс не доступна </string>
 </resources>

@@ -1,6 +1,11 @@
 package com.aleksandrgenrihs.sovcombanktest.presentation
 
+import android.Manifest
 import android.app.Activity
+import android.content.pm.PackageManager
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -52,6 +57,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.aleksandrgenrihs.sovcombanktest.R
 import com.aleksandrgenrihs.sovcombanktest.receiver.SmsBroadcastReceiver
@@ -68,6 +74,30 @@ fun OtpScreen(
 ) {
     val viewState = viewModel.viewState
     val context = LocalContext.current
+
+    val isSmsPermissionGranted = ContextCompat.checkSelfPermission(
+        context,
+        Manifest.permission.RECEIVE_SMS
+    ) == PackageManager.PERMISSION_GRANTED
+
+    val requestPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { isGranted ->
+            if (!isGranted) {
+                Toast.makeText(
+                    context,
+                    context.getString(R.string.permissionIsNotGranted),
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+    )
+
+    LaunchedEffect(Unit) {
+        if (!isSmsPermissionGranted) {
+            requestPermissionLauncher.launch(Manifest.permission.RECEIVE_SMS)
+        }
+    }
 
     DisposableEffect(Unit) {
         SmsBroadcastReceiver.setOnCodeReceivedListener { code ->
