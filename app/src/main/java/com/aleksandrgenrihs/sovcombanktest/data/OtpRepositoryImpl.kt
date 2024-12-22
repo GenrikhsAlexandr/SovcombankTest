@@ -4,6 +4,7 @@ import com.aleksandrgenrihs.sovcombanktest.data.mapper.OtpRequestMapper
 import com.aleksandrgenrihs.sovcombanktest.data.mapper.OtpResendResponseMapper
 import com.aleksandrgenrihs.sovcombanktest.data.mapper.OtpVerifyResponseMapper
 import com.aleksandrgenrihs.sovcombanktest.domain.OtpRepository
+import com.aleksandrgenrihs.sovcombanktest.domain.model.OtpCode
 import com.aleksandrgenrihs.sovcombanktest.domain.model.OtpInfo
 import com.aleksandrgenrihs.sovcombanktest.domain.model.OtpVerify
 import kotlinx.coroutines.delay

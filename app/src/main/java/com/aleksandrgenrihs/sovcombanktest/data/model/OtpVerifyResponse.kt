@@ -5,5 +5,4 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class OtpVerifyResponse(
     val success: Boolean,
-    val message: String? = null
 )
