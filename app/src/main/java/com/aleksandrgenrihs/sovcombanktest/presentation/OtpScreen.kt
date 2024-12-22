@@ -111,7 +111,7 @@ fun OtpScreen(
     Content(
         viewState = viewState,
         onClickBack = { (context as? Activity)?.finish() },//так как некуда возращаться, поэтому при нажатии приложение закроется
-        onClickResend = viewModel::otpRequest,
+        onClickResend = viewModel::otpResend,
         userInput = viewState.userInput,
         onInputChange = { viewModel.onInputChange(it) },
         errorText = if (!viewState.correctCode) stringResource(id = R.string.incorrectCode) else null

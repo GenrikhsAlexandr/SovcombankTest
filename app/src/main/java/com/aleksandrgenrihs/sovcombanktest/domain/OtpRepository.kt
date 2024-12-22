@@ -1,14 +1,9 @@
 package com.aleksandrgenrihs.sovcombanktest.domain
 
-import com.aleksandrgenrihs.sovcombanktest.domain.model.OtpVerify
 import com.aleksandrgenrihs.sovcombanktest.domain.model.OtpInfo
-import kotlin.time.Duration
+import com.aleksandrgenrihs.sovcombanktest.domain.model.OtpVerify
 
 interface OtpRepository {
-    /**
-     * Определяем, как долго пользователь должен ждать перед отправкой нового письма с подтверждением
-     */
-    suspend fun setCanResendIn(duration: Duration, codeLength:Int)
 
     /**
      * @return true, если пользователь может отправить запрос на новое сообщение с кодом
@@ -18,7 +13,7 @@ interface OtpRepository {
     /**
      * @return оставшееся время в секундах, которое пользователь должен ждать перед отправкой нового письма с кодом
      */
-    suspend fun getCanSendRequestInSeconds(): Int
+    suspend fun getCanSendRequestInSeconds(currentTime:Long = System.currentTimeMillis()): Int
 
     /**
      * @return  количество символов в коде подтверждения
@@ -28,7 +23,7 @@ interface OtpRepository {
     /**
      * Запрос на отправку кода подтверждения пользователю
      */
-    suspend fun otpRequest(): Result<OtpInfo>
+    suspend fun otpResend(): Result<OtpInfo>
 
     /**
      *  Верификация пользователя по коду

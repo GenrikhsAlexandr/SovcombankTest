@@ -12,7 +12,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.time.Duration
+import kotlin.coroutines.cancellation.CancellationException
 import kotlin.time.Duration.Companion.seconds
 
 @HiltViewModel
@@ -25,11 +25,11 @@ class OtpViewModel
 
     init {
         viewModelScope.launch {
-            otpRequest()
+            otpResend()
         }
     }
 
-    fun otpRequest() {
+    fun otpResend() {
         viewModelScope.launch {
             viewState = viewState.copy(
                 loading = true
@@ -39,14 +39,14 @@ class OtpViewModel
                     startTimerIfNeeded()
                     return@launch
                 }
-                val response = interactor.otpRequest()
+                interactor.otpResend()
                     .onSuccess {
                         viewState = viewState.copy(
                             canResend = false,
                         )
                     }
                     .getOrThrow()
-                setCanResendIn(response.canResendIn, response.codeLength)
+                startTimerIfNeeded()
             } catch (e: Exception) {
                 e.printStackTrace()
                 viewState = viewState.copy(
@@ -57,19 +57,6 @@ class OtpViewModel
         }.invokeOnCompletion {
             viewState = viewState.copy(
                 loading = false
-            )
-        }
-    }
-
-    private suspend fun setCanResendIn(canResendIn: Duration, codeLength: Int) {
-        try {
-            interactor.setCanResendIn(canResendIn, codeLength)
-            startTimerIfNeeded()
-            viewState = viewState.copy(isError = false)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            viewState = viewState.copy(
-                isError = true,
             )
         }
     }
@@ -133,14 +120,17 @@ class OtpViewModel
                 viewState = viewState.copy(
                     correctCode = success,
                 )
+            } catch (e: CancellationException) {
+                // Do nothing
+
             } catch (e: Exception) {
                 viewState = viewState.copy(
                     isError = true,
                 )
-
-            } finally {
-                viewState = viewState.copy(loading = false)
             }
+            viewState = viewState.copy(loading = false)
+        }.invokeOnCompletion {
+
         }
     }
 
