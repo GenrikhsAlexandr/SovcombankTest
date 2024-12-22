@@ -77,7 +77,7 @@ class OtpRepositoryImpl @Inject constructor(
      */
     private fun setCanResendIn(duration: Duration, codeLength: Int) {
         val startTime = System.currentTimeMillis()
-        val endTime = startTime + (duration - 1.seconds).inWholeMilliseconds
+        val endTime = startTime + duration.inWholeMilliseconds
         sharedPref.saveTime(endTime)
         sharedPref.saveCodeLength(codeLength)
     }

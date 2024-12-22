@@ -67,15 +67,12 @@ class OtpViewModel
         viewState = viewState.copy(
             codeLength = codeLength,
         )
-        updateResendButtonState(secondsLeft)
-        startTimer(secondsLeft)
+        if (secondsLeft > 0) {
+            startTimer(secondsLeft)
+        }
     }
 
     private fun startTimer(secondsLeft: Int) {
-        if (secondsLeft <= 0) {
-            return
-        }
-
         viewModelScope.launch {
             var secondsLeftInternal = secondsLeft
             while (isActive && secondsLeftInternal >= 0) {
