@@ -1,7 +1,7 @@
 package com.aleksandrgenrihs.sovcombanktest.domain
 
-import com.aleksandrgenrihs.sovcombanktest.domain.model.OtpVerify
 import com.aleksandrgenrihs.sovcombanktest.domain.model.OtpInfo
+import com.aleksandrgenrihs.sovcombanktest.domain.model.OtpVerify
 import javax.inject.Inject
 
 class OtpInteractor
@@ -11,7 +11,6 @@ class OtpInteractor
     suspend fun canSendRequest(): Boolean = repository.canSendRequest()
 
     suspend fun otpResend(): Result<OtpInfo> = repository.otpResend()
-
 
     suspend fun getCanResendInSeconds(): Int = repository.getCanSendRequestInSeconds()
 

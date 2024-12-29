@@ -6,4 +6,9 @@ plugins {
     alias(libs.plugins.daggerHiltAndroid) apply false
     alias(libs.plugins.kotlinParcelize) apply false
     alias(libs.plugins.ksp) apply false
+    alias(libs.plugins.detekt) apply true
+}
+
+tasks.register("detektAll") {
+    dependsOn(subprojects.map { "${it.path}:detekt" })
 }

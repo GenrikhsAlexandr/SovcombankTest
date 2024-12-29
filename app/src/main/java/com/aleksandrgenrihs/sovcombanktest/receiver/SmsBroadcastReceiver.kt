@@ -33,23 +33,25 @@ class SmsBroadcastReceiver : BroadcastReceiver() {
      * allowedSenders - разрешенные отправители
      */
     override fun onReceive(context: Context?, intent: Intent?) {
-        if (intent?.action.equals(Telephony.Sms.Intents.SMS_RECEIVED_ACTION)) {
-            val items: Array<SmsMessage> = Telephony.Sms.Intents.getMessagesFromIntent(intent)
-            for (item in items) {
-                val senderNumber: String? = item.originatingAddress
-                val allowedSendersString = BuildConfig.ALLOWED_SENDERS
-                val allowedSenders = allowedSendersString.split(",")
+        if (intent?.action != Telephony.Sms.Intents.SMS_RECEIVED_ACTION) return
 
-                if (senderNumber != null && allowedSenders.contains(senderNumber)) {
-                    val messageBody = item.messageBody
-                    val code = extractCodeFromSms(messageBody)
+        val messages = Telephony.Sms.Intents.getMessagesFromIntent(intent)
+        messages.forEach { processSmsMessage(it) }
+    }
 
-                    if (code.isNotEmpty()) {
-                        onCodeReceived?.invoke(code)
-                    }
-                }
-            }
+    private fun processSmsMessage(message: SmsMessage) {
+        val senderNumber = message.originatingAddress ?: return
+        if (!isSenderAllowed(senderNumber)) return
+
+        val code = extractCodeFromSms(message.messageBody)
+        if (code.isNotEmpty()) {
+            onCodeReceived?.invoke(code)
         }
+    }
+
+    private fun isSenderAllowed(senderNumber: String): Boolean {
+        val allowedSenders = BuildConfig.ALLOWED_SENDERS.split(",")
+        return allowedSenders.contains(senderNumber)
     }
 
     /**

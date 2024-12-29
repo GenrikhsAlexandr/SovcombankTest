@@ -39,19 +39,16 @@ class OtpViewModel
                     startTimerIfNeeded()
                     return@launch
                 }
-                interactor.otpResend()
-                    .onSuccess {
-                        viewState = viewState.copy(
-                            canResend = false,
-                        )
-                    }
-                    .getOrThrow()
+                interactor.otpResend().onSuccess {
+                    viewState = viewState.copy(
+                        canResend = false,
+                    )
+                }.getOrThrow()
                 startTimerIfNeeded()
             } catch (e: Exception) {
                 e.printStackTrace()
                 viewState = viewState.copy(
-                    isError = true,
-                    loading = false
+                    isError = true, loading = false
                 )
             }
         }.invokeOnCompletion {
@@ -76,7 +73,6 @@ class OtpViewModel
         viewModelScope.launch {
             var secondsLeftInternal = secondsLeft
             while (isActive && secondsLeftInternal >= 0) {
-
                 updateResendButtonState(secondsLeftInternal)
 
                 delay(1.seconds)
@@ -90,8 +86,7 @@ class OtpViewModel
             viewState.copy(canResend = true)
         } else {
             viewState.copy(
-                secondsLeft = secondsLeft,
-                canResend = false
+                secondsLeft = secondsLeft, canResend = false
             )
         }
     }
@@ -118,16 +113,14 @@ class OtpViewModel
                     correctCode = success,
                 )
             } catch (e: CancellationException) {
-                // Do nothing
-
+                throw CancellationException("Операция была отменена", e)
             } catch (e: Exception) {
                 viewState = viewState.copy(
                     isError = true,
                 )
             }
-            viewState = viewState.copy(loading = false)
         }.invokeOnCompletion {
-
+            viewState = viewState.copy(loading = false)
         }
     }
 

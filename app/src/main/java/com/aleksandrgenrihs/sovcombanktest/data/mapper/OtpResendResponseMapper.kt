@@ -1,8 +1,8 @@
 package com.aleksandrgenrihs.sovcombanktest.data.mapper
 
-import com.aleksandrgenrihs.sovcombanktest.utils.Mapper
 import com.aleksandrgenrihs.sovcombanktest.data.model.OtpResendResponse
 import com.aleksandrgenrihs.sovcombanktest.domain.model.OtpInfo
+import com.aleksandrgenrihs.sovcombanktest.utils.Mapper
 import javax.inject.Inject
 
 class OtpResendResponseMapper

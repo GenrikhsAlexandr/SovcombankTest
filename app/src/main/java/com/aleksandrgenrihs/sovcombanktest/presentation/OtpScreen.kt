@@ -70,14 +70,13 @@ import com.aleksandrgenrihs.sovcombanktest.ui.theme.SovcombankTestTheme
 
 @Composable
 fun OtpScreen(
-    viewModel: OtpViewModel = hiltViewModel()
+    viewModel: OtpViewModel = hiltViewModel(),
 ) {
     val viewState = viewModel.viewState
     val context = LocalContext.current
 
     val isSmsPermissionGranted = ContextCompat.checkSelfPermission(
-        context,
-        Manifest.permission.RECEIVE_SMS
+        context, Manifest.permission.RECEIVE_SMS
     ) == PackageManager.PERMISSION_GRANTED
 
     val requestPermissionLauncher = rememberLauncherForActivityResult(
@@ -110,11 +109,15 @@ fun OtpScreen(
 
     Content(
         viewState = viewState,
-        onClickBack = { (context as? Activity)?.finish() },//так как некуда возращаться, поэтому при нажатии приложение закроется
+        onClickBack = { (context as? Activity)?.finish() },
         onClickResend = viewModel::otpResend,
         userInput = viewState.userInput,
         onInputChange = { viewModel.onInputChange(it) },
-        errorText = if (!viewState.correctCode) stringResource(id = R.string.incorrectCode) else null
+        errorText = if (!viewState.correctCode) {
+            stringResource(id = R.string.incorrectCode)
+        } else {
+            null
+        }
     )
     if (viewState.isError) {
         DialogError(
@@ -134,30 +137,28 @@ private fun Content(
     errorText: String?,
     onInputChange: (String) -> Unit = {},
 ) {
-    Scaffold(
-        topBar = {
-            CenterAlignedTopAppBar(
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface,
-                ),
-                title = {
-                    Text(
-                        text = stringResource(id = R.string.appbarTitle),
-                        style = MaterialTheme.typography.titleMedium,
+    Scaffold(topBar = {
+        CenterAlignedTopAppBar(
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = MaterialTheme.colorScheme.surface,
+            ),
+            title = {
+                Text(
+                    text = stringResource(id = R.string.appbarTitle),
+                    style = MaterialTheme.typography.titleMedium,
+                )
+            },
+            navigationIcon = {
+                IconButton(onClick = onClickBack) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                        tint = NavigationColor,
+                        contentDescription = "Back",
                     )
-                },
-                navigationIcon = {
-                    IconButton(onClick = onClickBack) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                            tint = NavigationColor,
-                            contentDescription = "Back",
-                        )
-                    }
-                },
-            )
-        }
-    ) { paddingValues ->
+                }
+            },
+        )
+    }) { paddingValues ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -168,8 +169,7 @@ private fun Content(
         ) {
             if (viewState.loading) {
                 CircularProgressIndicator(
-                    modifier = Modifier
-                        .wrapContentSize()
+                    modifier = Modifier.wrapContentSize()
                 )
             }
             Column(
@@ -186,8 +186,7 @@ private fun Content(
                 Spacer(modifier = Modifier.height(164.dp))
 
                 CodeInputTextField(
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally),
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
                     errorText = errorText,
                     onInputChange = onInputChange,
                     codeLength = viewState.codeLength,
@@ -203,11 +202,14 @@ private fun Content(
                 onClick = onClickResend
             ) {
                 Text(
-                    text = if (viewState.canResend) stringResource(id = R.string.resend)
-                    else stringResource(
-                        id = R.string.blockResend,
-                        viewState.secondsLeft
-                    ),
+                    text = if (viewState.canResend) {
+                        stringResource(id = R.string.resend)
+                    } else {
+                        stringResource(
+                            id = R.string.blockResend,
+                            viewState.secondsLeft
+                        )
+                    },
                     style = MaterialTheme.typography.titleSmall,
                     color = if (viewState.canResend) Black else Blue,
                 )
@@ -223,7 +225,7 @@ private fun CodeInputTextField(
     errorText: String? = null,
     codeLength: Int,
     onInputChange: (String) -> Unit = {},
-    onImeGoAction: () -> Unit = {}
+    onImeGoAction: () -> Unit = {},
 ) {
     val focusRequester = remember { FocusRequester() }
 
@@ -285,13 +287,16 @@ private fun CodeInputTextField(
                                 text = input.getOrNull(i)?.toString() ?: "",
                                 style = textStyle
                             )
-                            Box(
+                            Spacer(
                                 modifier = Modifier
                                     .width(36.dp)
                                     .height(2.dp)
                                     .background(
-                                        if (isError) Red
-                                        else Gray500
+                                        if (isError) {
+                                            Red
+                                        } else {
+                                            Gray500
+                                        }
                                     )
                                     .align(Alignment.BottomCenter)
                             )
@@ -321,8 +326,8 @@ private fun CodeInputTextField(
 
 @PreviewLightDark
 @Composable
-private fun AuthEmailVerificationCodeScreenPreview() {
-    SovcombankTestTheme() {
+private fun OldScreenPreview() {
+    SovcombankTestTheme {
         Content(
             viewState = OtpUiState(),
             userInput = "",

@@ -8,6 +8,6 @@ data class OtpUiState(
     val canVerify: Boolean = false,
     val userInput: String = "",
     val loading: Boolean = false,
-    val codeLength: Int = 0,
+    val codeLength: Int = 6,
     val isError: Boolean = false
 )

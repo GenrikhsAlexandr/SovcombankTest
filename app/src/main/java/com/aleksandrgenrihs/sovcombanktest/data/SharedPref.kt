@@ -22,9 +22,7 @@ class SharedPref
      */
     fun saveTime(endTime: Long) {
         preferences.edit()
-            .putLong(
-                "time", endTime
-            )
+            .putLong("time", endTime)
             .apply()
     }
 
@@ -33,9 +31,7 @@ class SharedPref
      */
     fun saveCodeLength(codeLength: Int) {
         preferences.edit()
-            .putInt(
-                "code", codeLength
-            )
+            .putInt("code", codeLength)
             .apply()
     }
 

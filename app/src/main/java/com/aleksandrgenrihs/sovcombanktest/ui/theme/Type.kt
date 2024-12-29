@@ -58,14 +58,14 @@ val Typography = Typography(
         letterSpacing = 0.sp,
         textAlign = TextAlign.Center
     ),
-  bodyMedium = TextStyle(
-      fontFamily = fontFamily,
-      fontWeight = W600,
-      color = LabelColor,
-      fontSize = 16.sp,
-      lineHeight = 21.sp,
-      letterSpacing = 0.sp,
-  ),
+    bodyMedium = TextStyle(
+        fontFamily = fontFamily,
+        fontWeight = W600,
+        color = LabelColor,
+        fontSize = 16.sp,
+        lineHeight = 21.sp,
+        letterSpacing = 0.sp,
+    ),
     bodySmall = TextStyle(
         fontFamily = fontFamily,
         fontWeight = W400,

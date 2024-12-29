@@ -54,7 +54,7 @@ fun DialogError(
 @Preview(widthDp = 300, heightDp = 400)
 @Composable
 private fun DialogInfoPreview() {
-    SovcombankTestTheme() {
+    SovcombankTestTheme {
         DialogError(
             onDismiss = {},
             text = stringResource(R.string.unknownError)

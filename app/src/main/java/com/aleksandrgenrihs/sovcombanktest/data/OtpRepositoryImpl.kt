@@ -4,7 +4,6 @@ import com.aleksandrgenrihs.sovcombanktest.data.mapper.OtpRequestMapper
 import com.aleksandrgenrihs.sovcombanktest.data.mapper.OtpResendResponseMapper
 import com.aleksandrgenrihs.sovcombanktest.data.mapper.OtpVerifyResponseMapper
 import com.aleksandrgenrihs.sovcombanktest.domain.OtpRepository
-import com.aleksandrgenrihs.sovcombanktest.domain.model.OtpCode
 import com.aleksandrgenrihs.sovcombanktest.domain.model.OtpInfo
 import com.aleksandrgenrihs.sovcombanktest.domain.model.OtpVerify
 import kotlinx.coroutines.delay
@@ -19,7 +18,6 @@ class OtpRepositoryImpl @Inject constructor(
     private val otpRequestMapper: OtpRequestMapper,
     private val otpResendMapper: OtpResendResponseMapper,
 ) : OtpRepository {
-
 
     override suspend fun canSendRequest(): Boolean {
         return getCanSendRequestInSeconds() <= 0

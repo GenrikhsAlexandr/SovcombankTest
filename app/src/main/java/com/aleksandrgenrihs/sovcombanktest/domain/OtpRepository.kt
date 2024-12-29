@@ -13,10 +13,10 @@ interface OtpRepository {
     /**
      * @return оставшееся время в секундах, которое пользователь должен ждать перед отправкой нового письма с кодом
      */
-    suspend fun getCanSendRequestInSeconds(currentTime:Long = System.currentTimeMillis()): Int
+    suspend fun getCanSendRequestInSeconds(currentTime: Long = System.currentTimeMillis()): Int
 
     /**
-     * @return  количество символов в коде подтверждения
+     * @return количество символов в коде подтверждения
      */
     suspend fun getCodeLength(): Int
 

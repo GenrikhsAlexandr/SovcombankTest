@@ -64,7 +64,6 @@ class OtpRepositoryImplTest {
             assertEquals(0, result)
         }
 
-
     @Test
     fun `WHEN send otp THEN return OtpInfo`() = runTest {
         whenever(service.otpResend()).thenReturn(
@@ -82,12 +81,7 @@ class OtpRepositoryImplTest {
 
         val result = repository.otpResend().getOrNull()
 
-        assertEquals(
-            OtpInfo(
-                canResendIn = 100.milliseconds,
-                codeLength = 6
-            ), result
-        )
+        assertEquals(OtpInfo(canResendIn = 100.milliseconds, codeLength = 6), result)
 
         verify(service).otpResend()
         verify(otpResendMapper).map(
@@ -151,38 +145,17 @@ class OtpRepositoryImplTest {
 
         val result = repository.otpVerify(code = "123456").getOrNull()
 
-        assertEquals(
-            OtpVerify(
-                success = true
-            ), result
-        )
-
-        verify(service).otpVerify(
-            OtpRequest(
-                code = "123456"
-            )
-        )
-        verify(otpVerifyMapper).map(
-            OtpVerifyResponse(
-                success = true
-            )
-        )
-        verify(otpRequestMapper).map(
-            OtpCode(
-                code = "123456"
-            )
-        )
+        assertEquals(OtpVerify(success = true), result)
+        verify(service).otpVerify(OtpRequest(code = "123456"))
+        verify(otpVerifyMapper).map(OtpVerifyResponse(success = true))
+        verify(otpRequestMapper).map(OtpCode(code = "123456"))
         verifyNoMoreInteractions(service, otpVerifyMapper, otpRequestMapper)
     }
 
     @Test
     fun `WHEN verify request fails THEN return failure`() = runTest {
         whenever(
-            service.otpVerify(
-                OtpRequest(
-                    code = "123456"
-                )
-            )
+            service.otpVerify(OtpRequest(code = "123456"))
         ).thenAnswer {
             throw Exception("Request failed")
         }

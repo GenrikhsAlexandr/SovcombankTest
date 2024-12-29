@@ -1,8 +1,8 @@
 package com.aleksandrgenrihs.sovcombanktest.data.mapper
 
-import com.aleksandrgenrihs.sovcombanktest.utils.Mapper
 import com.aleksandrgenrihs.sovcombanktest.data.model.OtpRequest
 import com.aleksandrgenrihs.sovcombanktest.domain.model.OtpCode
+import com.aleksandrgenrihs.sovcombanktest.utils.Mapper
 import javax.inject.Inject
 
 class OtpRequestMapper
