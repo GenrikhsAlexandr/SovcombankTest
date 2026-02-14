@@ -26,7 +26,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    defaultConfig{
+    defaultConfig {
         buildConfigField("String", "ALLOWED_SENDERS", "\"1234,+781211234567\"")
     }
     val signingPropsFile = rootProject.file("signing.properties")
@@ -38,10 +38,12 @@ android {
 
     signingConfigs {
         create("release") {
-            storeFile = file("keystore.jks")
-            storePassword = signingProps["KEYSTORE_PASSWORD"] as String?
-            keyAlias = signingProps["KEY_ALIAS"] as String?
-            keyPassword = signingProps["KEY_PASSWORD"] as String?
+            if (signingPropsFile.exists()) {
+                storeFile = rootProject.file("keystore.jks")
+                storePassword = signingProps["KEYSTORE_PASSWORD"] as String?
+                keyAlias = signingProps["KEY_ALIAS"] as String?
+                keyPassword = signingProps["KEY_PASSWORD"] as String?
+            }
         }
     }
 
