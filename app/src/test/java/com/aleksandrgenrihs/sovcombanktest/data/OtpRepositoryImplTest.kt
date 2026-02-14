@@ -3,6 +3,7 @@ package com.aleksandrgenrihs.sovcombanktest.data
 import com.aleksandrgenrihs.sovcombanktest.data.mapper.OtpRequestMapper
 import com.aleksandrgenrihs.sovcombanktest.data.mapper.OtpResendResponseMapper
 import com.aleksandrgenrihs.sovcombanktest.data.mapper.OtpVerifyResponseMapper
+import com.aleksandrgenrihs.sovcombanktest.data.model.ClockProvider
 import com.aleksandrgenrihs.sovcombanktest.data.model.OtpRequest
 import com.aleksandrgenrihs.sovcombanktest.data.model.OtpResendResponse
 import com.aleksandrgenrihs.sovcombanktest.data.model.OtpVerifyResponse
@@ -31,6 +32,10 @@ class OtpRepositoryImplTest {
     private val otpRequestMapper: OtpRequestMapper = mock()
     private val otpResendMapper: OtpResendResponseMapper = mock()
 
+    private val fakeClock = object : ClockProvider {
+        override fun now() = 1000L
+    }
+
     @BeforeEach
     fun setUp() {
         repository = OtpRepositoryImpl(
@@ -38,7 +43,8 @@ class OtpRepositoryImplTest {
             sharedPref,
             otpVerifyMapper,
             otpRequestMapper,
-            otpResendMapper
+            otpResendMapper,
+            fakeClock
         )
     }
 
@@ -90,7 +96,7 @@ class OtpRepositoryImplTest {
                 codeLength = 6
             )
         )
-        verify(sharedPref).saveTime(100)
+        verify(sharedPref).saveTime(1100L)
         verify(sharedPref).saveCodeLength(6)
         verifyNoMoreInteractions(service)
     }

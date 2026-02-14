@@ -3,6 +3,7 @@ package com.aleksandrgenrihs.sovcombanktest.data
 import com.aleksandrgenrihs.sovcombanktest.data.mapper.OtpRequestMapper
 import com.aleksandrgenrihs.sovcombanktest.data.mapper.OtpResendResponseMapper
 import com.aleksandrgenrihs.sovcombanktest.data.mapper.OtpVerifyResponseMapper
+import com.aleksandrgenrihs.sovcombanktest.data.model.ClockProvider
 import com.aleksandrgenrihs.sovcombanktest.domain.OtpRepository
 import com.aleksandrgenrihs.sovcombanktest.domain.model.OtpCode
 import com.aleksandrgenrihs.sovcombanktest.domain.model.OtpInfo
@@ -10,6 +11,7 @@ import com.aleksandrgenrihs.sovcombanktest.domain.model.OtpVerify
 import kotlinx.coroutines.delay
 import javax.inject.Inject
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 
 class OtpRepositoryImpl @Inject constructor(
     private val service: ApiService,
@@ -17,6 +19,7 @@ class OtpRepositoryImpl @Inject constructor(
     private val otpVerifyMapper: OtpVerifyResponseMapper,
     private val otpRequestMapper: OtpRequestMapper,
     private val otpResendMapper: OtpResendResponseMapper,
+    private val clockProvider: ClockProvider
 ) : OtpRepository {
 
     override suspend fun canSendRequest(): Boolean {
@@ -75,7 +78,7 @@ class OtpRepositoryImpl @Inject constructor(
      * Определяем, как долго пользователь должен ждать перед отправкой нового письма с подтверждением
      */
     private fun setCanResendIn(duration: Duration, codeLength: Int) {
-        val startTime = System.currentTimeMillis()
+        val startTime = clockProvider.now()
         val endTime = startTime + duration.inWholeMilliseconds
         sharedPref.saveTime(endTime)
         sharedPref.saveCodeLength(codeLength)
