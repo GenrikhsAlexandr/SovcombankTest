@@ -24,9 +24,12 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    defaultConfig{
+        buildConfigField("String", "ALLOWED_SENDERS", "\"1234,+781211234567\"")
+    }
+
     buildTypes {
         debug {
-            buildConfigField("String", "ALLOWED_SENDERS", "\"1234,+781211234567\"")
         }
         release {
             isMinifyEnabled = false
