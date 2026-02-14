@@ -19,7 +19,7 @@ interface BindsModule {
     fun bindOtpRepository(impl: OtpRepositoryImpl): OtpRepository
 
     @Binds
-    abstract fun bindClockProvider(
-        impl: SystemClockProvider
+    fun bindClockProvider(
+        impl: SystemClockProvider,
     ): ClockProvider
 }

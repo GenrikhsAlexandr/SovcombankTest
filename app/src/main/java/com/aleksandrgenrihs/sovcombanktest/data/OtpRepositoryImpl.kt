@@ -11,7 +11,6 @@ import com.aleksandrgenrihs.sovcombanktest.domain.model.OtpVerify
 import kotlinx.coroutines.delay
 import javax.inject.Inject
 import kotlin.time.Duration
-import kotlin.time.Duration.Companion.seconds
 
 class OtpRepositoryImpl @Inject constructor(
     private val service: ApiService,
