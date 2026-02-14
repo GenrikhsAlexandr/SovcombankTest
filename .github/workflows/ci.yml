@@ -1,0 +1,21 @@
+name: SovcomTest CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setuo-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - run: chmod +x ./gradlew
+      - run: ./gradlew assembleDebug
