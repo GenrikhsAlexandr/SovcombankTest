@@ -29,9 +29,11 @@ jobs:
 
       - name: Create gradle.properties
         run: |
-          echo "KEYSTORE_PASSWORD=${{ secrets.KEYSTORE_PASSWORD }}" >> gradle.properties
-          echo "KEY_ALIAS=${{ secrets.KEY_ALIAS }}" >> gradle.properties
-          echo "KEY_PASSWORD=${{ secrets.KEY_PASSWORD }}" >> gradle.properties
+          cat <<EOF > signing.properties
+          KEYSTORE_PASSWORD=${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS=${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD=${{ secrets.KEY_PASSWORD }}
+          EOF
 
       - name: Build Release AAB
         run: ./gradlew bundleRelease
