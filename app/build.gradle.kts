@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -24,9 +26,29 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    defaultConfig {
+        buildConfigField("String", "ALLOWED_SENDERS", "\"1234,+781211234567\"")
+    }
+    val signingPropsFile = rootProject.file("signing.properties")
+    val signingProps = Properties()
+
+    if (signingPropsFile.exists()) {
+        signingProps.load(signingPropsFile.inputStream())
+    }
+
+    signingConfigs {
+        create("release") {
+            if (signingPropsFile.exists()) {
+                storeFile = rootProject.file("keystore.jks")
+                storePassword = signingProps["KEYSTORE_PASSWORD"] as String?
+                keyAlias = signingProps["KEY_ALIAS"] as String?
+                keyPassword = signingProps["KEY_PASSWORD"] as String?
+            }
+        }
+    }
+
     buildTypes {
         debug {
-            buildConfigField("String", "ALLOWED_SENDERS", "\"1234,+781211234567\"")
         }
         release {
             isMinifyEnabled = false
@@ -34,6 +56,9 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            if (signingPropsFile.exists()) {
+                signingConfig = signingConfigs.getByName("release")
+            }
         }
     }
     compileOptions {

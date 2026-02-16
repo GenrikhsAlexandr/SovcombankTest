@@ -1,6 +1,8 @@
 package com.aleksandrgenrihs.sovcombanktest.di
 
 import com.aleksandrgenrihs.sovcombanktest.data.OtpRepositoryImpl
+import com.aleksandrgenrihs.sovcombanktest.data.model.ClockProvider
+import com.aleksandrgenrihs.sovcombanktest.data.model.SystemClockProvider
 import com.aleksandrgenrihs.sovcombanktest.domain.OtpRepository
 import dagger.Binds
 import dagger.Module
@@ -15,4 +17,9 @@ interface BindsModule {
     @Binds
     @Singleton
     fun bindOtpRepository(impl: OtpRepositoryImpl): OtpRepository
+
+    @Binds
+    fun bindClockProvider(
+        impl: SystemClockProvider,
+    ): ClockProvider
 }
